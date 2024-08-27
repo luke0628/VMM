@@ -1,0 +1,11 @@
+deactivate groups global interfaces lo0
+deactivate groups global routing-options router-id
+set system ports console log-out-on-disconnect
+set chassis aggregated-devices ethernet device-count 50
+set interfaces ge-0/0/0 gigether-options 802.3ad ae0
+set interfaces ge-0/0/1 gigether-options 802.3ad ae0
+set interfaces ae0 flexible-vlan-tagging
+set interfaces ae0 encapsulation flexible-ethernet-services
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 unit 100 vlan-id 100
+set interfaces ae0 unit 100 family inet address 40.1.1.1/24

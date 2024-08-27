@@ -1,0 +1,48 @@
+system {
+    login {
+        user labroot {
+            class super-user;
+            authentication {
+                encrypted-password "$6$3VT0REjH$S.EJlXlQTHjbwQP922BbK9J0QMnDMdn2zHgdDcHuwvrO5o7Q3fNwjk36Cu81eMXe9r6xgJbbwapMkdndW3fo8."; ## SECRET-DATA
+            }
+        }
+    }
+    ports {
+        console log-out-on-disconnect;
+    }
+}
+chassis {
+    aggregated-devices {
+        ethernet {
+            device-count 50;
+        }
+    }
+}
+interfaces {
+    ge-0/0/0 {
+        gigether-options {
+            802.3ad ae0;
+        }
+    }
+    ge-0/0/1 {
+        gigether-options {
+            802.3ad ae0;
+        }
+    }
+    ae0 {
+        flexible-vlan-tagging;
+        encapsulation flexible-ethernet-services;
+        aggregated-ether-options {
+            lacp {
+                active;
+            }
+        }
+        unit 100 {
+            vlan-id 100;
+            family inet {
+                address 40.1.1.2/24;
+            }
+        }
+    }
+}
+

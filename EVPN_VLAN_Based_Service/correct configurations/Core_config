@@ -1,0 +1,112 @@
+groups {
+    protocols {
+        interfaces {
+            <*-*> {
+                unit <*> {
+                    family mpls;
+                }
+            }
+        }
+        protocols {
+            ldp {
+                interface all;
+                interface fxp0.0 {
+                    disable;
+                }
+            }
+            mpls {
+                interface all;
+                interface fxp0.0 {
+                    disable;
+                }
+            }
+            ospf {
+                area 0.0.0.0 {
+                    interface all;
+                    interface fxp0.0 {
+                        disable;
+                    }
+                }
+            }
+            rsvp {
+                interface all;
+                interface fxp0.0 {
+                    disable;
+                }
+            }
+        }
+    }
+}
+apply-groups [ protocols ];
+system {
+    login {
+        user labroot {
+            class super-user;
+            authentication {
+                encrypted-password "$6$3VT0REjH$S.EJlXlQTHjbwQP922BbK9J0QMnDMdn2zHgdDcHuwvrO5o7Q3fNwjk36Cu81eMXe9r6xgJbbwapMkdndW3fo8."; ## SECRET-DATA
+            }
+        }
+    }
+    ports {
+        console log-out-on-disconnect;
+    }
+}
+interfaces {
+    ge-0/0/0 {
+        unit 0 {
+            family inet {
+                address 100.1.1.1/31;
+            }
+        }
+    }
+    ge-0/0/1 {
+        unit 0 {
+            family inet {
+                address 100.1.1.3/31;
+            }
+        }
+    }
+    ge-0/0/2 {
+        unit 0 {
+            family inet {
+                address 100.1.1.5/31;
+            }
+        }
+    }
+    ge-0/0/3 {
+        unit 0 {
+            family inet {
+                address 100.1.1.7/31;
+            }
+        }
+    }
+    lo0 {
+        apply-groups-except global;
+        unit 0 {
+            family inet {
+                address 120.1.1.5/32;
+            }
+        }
+    }
+}
+routing-options {
+    router-id 120.1.1.5;
+    autonomous-system 65500;
+}
+protocols {
+    bgp {
+        group evpn-signalling {
+            type internal;
+            local-address 120.1.1.5;
+            family evpn {
+                signaling;
+            }
+            cluster 0.0.255.220;
+            neighbor 120.1.1.1;
+            neighbor 120.1.1.2;
+            neighbor 120.1.1.3;
+            neighbor 120.1.1.4;
+        }
+    }
+}
+

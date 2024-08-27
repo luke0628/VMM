@@ -1,0 +1,129 @@
+groups {
+    protocols {
+        interfaces {
+            <*-*> {
+                unit <*> {
+                    family mpls;
+                }
+            }
+        }
+        protocols {
+            ldp {
+                interface all;
+                interface fxp0.0 {
+                    disable;
+                }
+            }
+            mpls {
+                interface all;
+                interface fxp0.0 {
+                    disable;
+                }
+            }
+            ospf {
+                area 0.0.0.0 {
+                    interface all;
+                    interface fxp0.0 {
+                        disable;
+                    }
+                }
+            }
+            rsvp {
+                interface all;
+                interface fxp0.0 {
+                    disable;
+                }
+            }
+        }
+    }
+}
+apply-groups [ protocols ];
+system {
+    login {
+        user labroot {
+            class super-user;
+            authentication {
+                encrypted-password "$6$3VT0REjH$S.EJlXlQTHjbwQP922BbK9J0QMnDMdn2zHgdDcHuwvrO5o7Q3fNwjk36Cu81eMXe9r6xgJbbwapMkdndW3fo8."; ## SECRET-DATA
+            }
+        }
+    }
+    ports {
+        console log-out-on-disconnect;
+    }
+}
+chassis {
+    aggregated-devices {
+        ethernet {
+            device-count 50;
+        }
+    }
+}
+interfaces {
+    ge-0/0/0 {
+        gigether-options {
+            802.3ad ae0;
+        }
+    }
+    ge-0/0/1 {
+        unit 0 {
+            family inet {
+                address 100.1.1.0/31;
+            }
+        }
+    }
+    ae0 {
+        flexible-vlan-tagging;
+        encapsulation flexible-ethernet-services;
+        esi {
+            00:00:00:11:11:11:00:00:00:00;
+            all-active;
+        }
+        aggregated-ether-options {
+            lacp {
+                active;
+                system-id 00:00:00:11:11:11;
+            }
+        }
+        unit 100 {
+            encapsulation vlan-bridge;
+            vlan-id 100;
+        }
+    }
+    lo0 {
+        apply-groups-except global;
+        unit 0 {
+            family inet {
+                address 120.1.1.1/32;
+            }
+        }
+    }
+}
+routing-instances {
+    evpn-vlan-based {
+        protocols {
+            evpn;
+        }
+        instance-type evpn;
+        vlan-id 100;
+        interface ae0.100;
+        route-distinguisher 120.1.1.1:1;
+        vrf-target target:65500:100;
+    }
+}
+routing-options {
+    router-id 120.1.1.1;
+    autonomous-system 65500;
+}
+protocols {
+    bgp {
+        group evpn-signalling {
+            type internal;
+            local-address 120.1.1.1;
+            family evpn {
+                signaling;
+            }
+            neighbor 120.1.1.5;
+        }
+    }
+}
+

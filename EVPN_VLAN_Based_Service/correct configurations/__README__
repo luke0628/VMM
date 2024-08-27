@@ -1,0 +1,55 @@
+Description:
+------------
+EVPN VLAN Based Service with Multi Homed PEs.
+
+Note: Follow below steps to deploy the VMM Pre-configured Scenarios. These can be started on the fly for quick tests. Note, please don't make any changes to these files. If any changes are required (e.g., Junos, config etc, then these files can be copied over to respective directories and re-used with any modifications as required. 
+
+Junos:
+------
+Junos image junos-x86-64-20.4R2.6.vmdk has been used in the vmm configuration file. 
+
+Steps to start the VMM 
+========================
+===> Login to a q-pod
+
+===> cd to the required directory e.g. "/volume/CSdata/ranpreets/vmm/EVPN/EVPN_VLAN_Based_Service". 
+
+     ranpreets@q-pod08-vmm:~$ cd /volume/CSdata/ranpreets/vmm/EVPN/EVPN_VLAN_Based_Service
+     ranpreets@q-pod08-vmm:/volume/CSdata/ranpreets/vmm/EVPN/EVPN_VLAN_Based_Service$
+
+===> Configure the q-pod with vmm config file in that directory. e.g. 
+
+     ranpreets@q-pod08-vmm:/volume/CSdata/ranpreets/vmm/EVPN/EVPN_VLAN_Based_Service$ vmm config evpn-vlan-based-service-mh.conf -g vmm-default
+     .....
+
+
+===> Start the vmm
+
+     ranpreets@q-pod08-vmm:/volume/CSdata/ranpreets/vmm/EVPN/EVPN_VLAN_Based_Service$ vmm start
+     .....
+
+
+===> Now, the EVPN topology is ready with configurations pre-loaded on it. Once the devices boot up, EVPN should be up and CEs should be able to communicate with each other. 
+
+Topology Diagram:
+-----------------
+                       +----------+                                  +----------+
+                  0/0/0|          |0/0/1                        0/0/0|          |0/0/1
+     +-----------------+  PE1     +-------------+      +-------------+  PE3     +-------------+
+     |                 |          |             |      |             |          |             |
+     |                 +----------+             |      |             +----------+             |
+     |0/0/0                                0/0/0|      |0/0/2                                 |0/0/0
++----+-----+                                  +-+------+-+                              +-----+----+
+|          |                                  |          |                              |          |
+|  CE1     |                                  |   Core   |                              |   CE2    |
+|          |                                  |          |                              |          |
++----+-----+                                  +-+------+-+                              +-----+----+
+     |0/0/1                                0/0/1|      |0/0/3                                 |0/0/1
+     |                                          |      |                                      |
+     |                 +----------+             |      |             +----------+             |
+     |           0/0/0 |          |0/0/1        |      |        0/0/0|          |0/0/1        |
+     +-----------------+  PE2     +-------------+      +-------------+  PE4     +-------------+
+                       |          |                                  |          |
+                       +----------+                                  +----------+
+
+

@@ -1,0 +1,43 @@
+system {
+    login {
+        user labroot {
+            class super-user;
+            authentication {
+                encrypted-password "$6$3VT0REjH$S.EJlXlQTHjbwQP922BbK9J0QMnDMdn2zHgdDcHuwvrO5o7Q3fNwjk36Cu81eMXe9r6xgJbbwapMkdndW3fo8."; ## SECRET-DATA
+            }
+        }
+    }
+    ports {
+        console log-out-on-disconnect;
+    }
+}
+interfaces {
+    ge-0/0/0 {
+        unit 0 {
+            family inet {
+                address 100.1.1.0/31;
+            }
+        }
+    }
+    ge-0/0/1 {
+        unit 0 {
+            family inet {
+                address 100.1.1.4/31;
+            }
+        }
+    }
+    ge-0/0/2 {
+        unit 0 {
+            family inet {
+                address 100.1.1.2/31;
+            }
+        }
+    }
+    ge-0/0/3 {
+        unit 0 {
+            family inet {
+                address 100.1.1.6/31;
+            }                           
+        }
+    }
+}

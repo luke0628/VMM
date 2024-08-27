@@ -1,0 +1,1 @@
+scp -r "/Users/lyu/Library/CloudStorage/GoogleDrive-yululatech@gmail.com/Other computers/My MacBook Pro 15''/Lu's Dropbox/Juniper 学习/vmm/vmm_server/EVPN_VLAN_Based_Service" lyu@q-pod08-vmm.englab.juniper.net:/vmm/data/user_disks/lyu/EVPN/EVPN_VLAN_Based_Service

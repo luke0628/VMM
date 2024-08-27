@@ -1,0 +1,37 @@
+deactivate groups global interfaces lo0
+deactivate groups global routing-options router-id
+set groups protocols interfaces <*-*> unit <*> family mpls
+set groups protocols protocols ldp interface all
+set groups protocols protocols ldp interface fxp0.0 disable
+set groups protocols protocols mpls interface all
+set groups protocols protocols mpls interface fxp0.0 disable
+set groups protocols protocols ospf area 0.0.0.0 interface all
+set groups protocols protocols ospf area 0.0.0.0 interface fxp0.0 disable
+set groups protocols protocols rsvp interface all
+set groups protocols protocols rsvp interface fxp0.0 disable
+set apply-groups protocols
+set system ports console log-out-on-disconnect
+set chassis aggregated-devices ethernet device-count 50
+set interfaces ge-0/0/0 gigether-options 802.3ad ae0
+set interfaces ge-0/0/1 unit 0 family inet address 100.1.1.2/31
+set interfaces ae0 flexible-vlan-tagging
+set interfaces ae0 encapsulation flexible-ethernet-services
+set interfaces ae0 esi 00:00:00:11:11:11:00:00:00:00
+set interfaces ae0 esi all-active
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 aggregated-ether-options lacp system-id 00:00:00:11:11:11
+set interfaces ae0 unit 100 encapsulation vlan-bridge
+set interfaces ae0 unit 100 vlan-id 100
+set interfaces lo0 unit 0 family inet address 120.1.1.2/32
+set routing-instances evpn-vlan-based protocols evpn
+set routing-instances evpn-vlan-based instance-type evpn
+set routing-instances evpn-vlan-based vlan-id 100
+set routing-instances evpn-vlan-based interface ae0.100
+set routing-instances evpn-vlan-based route-distinguisher 120.1.1.2:1
+set routing-instances evpn-vlan-based vrf-target target:65500:100
+set routing-options router-id 120.1.1.2
+set routing-options autonomous-system 65500
+set protocols bgp group evpn-signalling type internal
+set protocols bgp group evpn-signalling local-address 120.1.1.2
+set protocols bgp group evpn-signalling family evpn signaling
+set protocols bgp group evpn-signalling neighbor 120.1.1.5
